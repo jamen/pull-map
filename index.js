@@ -30,7 +30,7 @@ function asyncMap (fn) {
 
   return function (read) {
     return function next (end, write) {
-      if (endLate) return write(endedLate)
+      if (endLate) return write(endLate)
       if (end) {
         endLate = end
         if (!busy) return read(end, write)
