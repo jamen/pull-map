@@ -1,6 +1,6 @@
 {
   "name": "pull-map",
-  "description": "Create pull-stream with sync/async/through maps with ease",
+  "description": "Create sync, async, or through maps in pull-streams",
   "version": "0.0.0",
   "homepage": "https://github.com/jamen/pull-map",
   "author": "Jamen Marz (https://git.io/jamen)",
@@ -20,8 +20,7 @@
   },
   "devDependencies": {
     "pull-stream": "^3.5.0",
-    "tape": "^4.6.3",
-    "tape-benchmark": "^0.0.0"
+    "tape": "^4.6.3"
   },
   "keywords": [
     "jamen",
@@ -29,6 +28,7 @@
     "pull-map",
     "map",
     "sync",
-    "async"
+    "async",
+    "through"
   ]
 }

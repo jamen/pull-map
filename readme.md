@@ -1,15 +1,27 @@
 
 # pull-map
 
-> Create pull-stream with sync/async/through maps with ease
+> Create sync, async, or through maps in pull-streams
 
 ```js
-var pullMap = require('pull-map')
+var map = require('pull-map')
 
-// ...
+pull(
+  pull.values([1, 2, 3, 4, 5]),
+
+  // Sync map
+  map(num => num * 3),
+
+  // Async map
+  map((num, done) => {
+    hash(num, done)
+  }),
+
+  pull.log()
+)
 ```
 
-A longer description of your function here.
+The [`map`](#api_map) function is like [`pull.map`](https://github.com/pull-stream/pull-stream/blob/master/docs/throughs/map.md) and [`pull.asyncMap`](https://github.com/pull-stream/pull-stream/blob/master/docs/throughs/async-map.md) combined, by sync or async depending if the `done` callback is provided.  There is also [`map.through`](#api_map_through), which passes data on `undefined`.
 
 ## Installation
 
@@ -19,15 +31,54 @@ $ npm install --save pull-map
 
 ## Usage
 
-### `pullMap()`
+<a name="api_map"></a>
+### `map(fn)`
 
-A description of your function
+A [through stream]() that maps values with `map(x => ...)` or async map with `map((x, cb) => ...)`.  Async map's callback takes `cb(err, data)`.  One function for all your pull-stream mapping needs!
 
 ```js
-var foo = pullMap()
+// A sync map
+var foo = map(source => source.toLowerCase())
 
-// Log results
-console.log(foo)
+// An async map
+var bar = map((source, done) => {
+  fs.readFile(source, done)
+})
+```
+
+<a name="api_map_through"></a>
+### `map.through(fn)`
+
+The same sync/async functionality as [`map`](#api_map), except passes on data if it receives `undefined`.  Useful when you only want to replace some of the data in the pipeline.
+
+```js
+pull(
+  pull.values([1, 2.5, 3, 4.5, 5])
+  map.through(function (num) {
+    if (num !== Math.floor(num)) return -num
+  })
+  pull.collect(function (err, nums) {
+    console.log(nums)
+    // => [1, -2.5, 3, -4.5, 5]
+  })
+)
+```
+
+<a name="api_sync_async">
+### `map.sync(fn)`
+### `map.async(fn)`
+
+The sync and async map methods behind [`map`](#api_map).
+
+```js
+pull(
+  count(),
+  map.sync(x => x * 3)
+  map.async(function (x, done) {
+    hash(x, done)
+  }),
+  pull.log()
+)
 ```
 
 ## License
